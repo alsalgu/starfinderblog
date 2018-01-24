@@ -194,7 +194,7 @@ def verify_password(username_or_token, password):
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('main.html')
+    return render_template('index.html')
 
 # TO DO #
 
