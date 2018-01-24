@@ -25,6 +25,8 @@
 *.log
 *.sql
 *.sqlite
+*.db
+*.pyc
 
 # OS generated files #
 ######################
@@ -41,7 +43,8 @@ ehthumbs.db
 config.py
 
 
-# Environments
+# Environments #
+################
 .env
 .venv
 env/

@@ -1,3 +1,4 @@
+from db_setup import Base, User, Character, BlogEntry, secret_key
 from flask import Flask, jsonify, request, url_for, abort
 from flask import g, render_template, flash, redirect
 from sqlalchemy.ext.declarative import declarative_base

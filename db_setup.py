@@ -12,7 +12,7 @@ import datetime
 
 Base = declarative_base()
 secret_key = ''.join(random.choice(
-    string.ascii_uppercase + string.digits) for x in xrange(32))
+    string.ascii_uppercase + string.digits) for x in range(32))
 
 
 def _get_date():
@@ -55,9 +55,10 @@ class User(Base):
     @property
     def serialize(self):
         return {'username': self.username,
-                'Name': self.displayName,}
+                'Name': self.displayName, }
 
 # Character Information
+
 
 class Character(Base):
     __tablename__ = 'character'
@@ -88,7 +89,8 @@ class Character(Base):
 
 # Blog Entry
 
-class Blog-Entry(Base):
+
+class BlogEntry(Base):
     __tablename__ = 'entry'
     id = Column(Integer, primary_key=True)
     title = Column(String(250), nullable=False)
@@ -96,9 +98,9 @@ class Blog-Entry(Base):
     tags = Column(String(250))
     author_name = Column(String(250)), ForeignKey('character.name')
     author_id = Column(Integer, ForeignKey('character.id'))
-    author = relationship("Character", foreign_keys=[author_name]
+    author = relationship("Character", foreign_keys=[author_name])
 
 # End Code Stuff
 
-engine = create_engine('sqlite:///database.db')
+engine=create_engine('sqlite:///database.db')
 Base.metadata.create_all(engine)
