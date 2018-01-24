@@ -194,7 +194,24 @@ def verify_password(username_or_token, password):
 @app.route('/')
 @app.route('/home')
 def home():
-    return "Hi"
+    return render_template('main.html')
+
+# TO DO #
+
+# User Registration
+# User Log In
+# User Profile Edit
+# User Profile Guest View
+
+# CHaracter Add
+# Character Edit/Delete/Owner VIew
+# Character Public View
+
+# Blog ENtry Edit/DElete/OWnerview
+# Blog entry Public view
+
+# Browse Character Factions
+# Search Blog Posts
 
 # End of App Code
 
