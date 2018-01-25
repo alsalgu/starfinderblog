@@ -49,7 +49,7 @@
     </div>
   </nav>
   {% with messages = get_flashed_messages() %} {% if messages %}
-  <div id="flashes" class="collapse show fixed-bottom border border-primary bg-secondary text-info">
+  <div id="flashes" class="display-4 collapse show fixed-bottom border border-primary bg-secondary text-info">
     <button data-target="#flashes" type="button" class="close" aria-label="Close"  data-toggle="collapse">
   <span aria-hidden="true">&times;</span>
 </button> <span class="p-2">{% for message in messages %} {{ message }} {% endfor %}</span>

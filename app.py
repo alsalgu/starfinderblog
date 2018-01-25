@@ -237,13 +237,22 @@ def articles():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        newUser = User(username=request.form['username'],
-                       email=request.form['email'])
-        newUser.hash_password(request.form['password'])
-        session.add(newUser)
-        flash('Registered!')
-        session.commit()
-        return redirect(url_for('home'))
+        if session.query(User).filter_by(
+                username=request.form['username']).all():
+            flash('Username Already Exists')
+            return render_template('register.html')
+        if session.query(User).filter_by(
+                email=request.form['email']).all():
+            flash('Email already in use.')
+            return render_template('register.html')
+        else:
+            newUser = User(username=request.form['username'],
+                           email=request.form['email'])
+            newUser.hash_password(request.form['password'])
+            session.add(newUser)
+            flash('Registered!')
+            session.commit()
+            return redirect(url_for('home'))
     else:
         return render_template('register.html')
 

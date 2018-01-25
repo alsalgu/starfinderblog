@@ -9,7 +9,7 @@
     <div class="form-row">
       <div class="form-group col">
         <label for="post-title">Title:</label>
-        <input class="form-control col" name="title" id="post-title" placeholder="The Tragedy of Darth Plageuis the Wise" />
+        <input class="form-control col" name="title" id="post-title" placeholder="The Tragedy of Darth Plageuis the Wise" required/>
       </div>
       <div class="form-group col">
         <label>Author:</label>
@@ -26,7 +26,7 @@
     </div>
     <div class="form-group">
       <label for="post-entry">Entry</label>
-      <textarea name="entry" class="form-control" rows="5" id="post-entry" placeholder="I thought not. It’s not a story the Jedi would tell you. It’s a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."></textarea>
+      <textarea name="entry" class="form-control" rows="5" id="post-entry" placeholder="I thought not. It’s not a story the Jedi would tell you. It’s a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself." required></textarea>
     </div>
     <input value="Post" type="submit" class="btn btn-primary" />
     <a class="btn btn-primary" href="{{ url_for('home') }}">Cancel</a>
