@@ -79,12 +79,12 @@ class Character(Base):
     @property
     def serialize(self):
         return {'Name': self.name,
-        'race': self.race,
-        'gender': self.gender,
-        'image_url': self.image_url,
-        'faction': self.faction,
-        'biography': self.biography,
-        'player': self.owner_name}
+                'race': self.race,
+                'gender': self.gender,
+                'image_url': self.image_url,
+                'faction': self.faction,
+                'biography': self.biography,
+                'player': self.owner_name}
 
 # Blog Entry
 
@@ -95,11 +95,12 @@ class BlogEntry(Base):
     title = Column(String(250), nullable=False)
     entry = Column(String(1000000), nullable=False)
     tags = Column(String(250))
-    author_name = Column(String(250)), ForeignKey('character.name')
-    author_id = Column(Integer, ForeignKey('character.id'))
-    author = relationship("Character", foreign_keys=[author_name])
+    author = Column(String(250))
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship("User", foreign_keys=[user_id])
 
 # End Code Stuff
 
-engine=create_engine('sqlite:///database.db')
+
+engine = create_engine('sqlite:///database.db')
 Base.metadata.create_all(engine)

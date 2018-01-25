@@ -4,10 +4,10 @@
     Not a member? <a href="{{ url_for('register') }}">Register Here!</a>
   </div>
   <div class="m-3">
-    <form  id="login-form" >
+    <form  id="login-form" method="POST" action="#">
       <div class="form-group row mb-2">
-        <input type="text" class="form-control col-2 mr-1" id="usernameInput" placeholder="Username" />
-        <input type="text" class="form-control col-2" id="passwordInput" placeholder="Password" />
+        <input type="text" name="username" class="form-control col-2 mr-1" id="usernameInput" placeholder="Username" />
+        <input type="text" name="password" class="form-control col-2" id="passwordInput" placeholder="Password" />
       </div>
       <div class="row">
           <button type="submit" class="btn btn-primary">Sign In</button>

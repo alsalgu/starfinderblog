@@ -194,7 +194,13 @@ def verify_password(username_or_token, password):
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('index.html')
+    if 'username' in login_session:
+        currentuser = session.query(User).filter_by(
+        username=login_session['username']).one()
+        return render_template('home.html', login_session=login_session,
+        currentuser=currentuser)
+    else:
+        return render_template('index.html', login_session=login_session)
 
 @app.route('/correspondents')
 def correspondents():
@@ -207,7 +213,7 @@ def articles():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        newUser = User(username=reques.form['username'],
+        newUser = User(username=request.form['username'],
         email=request.form['email'])
         newUser.hash_password(request.form['password'])
         session.add(newUser)
@@ -217,14 +223,38 @@ def register():
     else:
         return render_template('register.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+    for x in range(32))
+    login_session['state'] = state
+    users = session.query(User).all()
+    if request.method == 'POST':
+        user = request.form['username']
+        password = request.form['password']
+        users = session.query(User).all
+        if verify_password(user, password):
+            login_session['username'] = user
+            return redirect(url_for('home', login_session=login_session))
+        else:
+            flash('Wrong Credentials, friend.')
+            return render_template('login.html', STATE=state, users=users)
+    else:
+        return render_template('login.html', STATE=state, users=users)
+
+@app.route('/logout')
+def logout():
+    if 'username' in login_session:
+        del login_session['username']
+        del login_session['state']
+        flash("You have successfully logged out.")
+        return redirect(url_for('home'))
+    else:
+        flash("You aren't logged in.")
+        return redirect(url_for('home'))
 
 # TO DO #
 
-# User Registration
-# User Log In
 # User Profile Edit
 # User Profile Guest View
 
