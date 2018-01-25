@@ -227,7 +227,19 @@ def home():
 
 @app.route('/correspondents')
 def correspondents():
-    return render_template('correspondents.html')
+    return redirect(url_for('viewCor', page = 1))
+
+@app.route('/correspondents/<int:page>', methods=['GET'])
+def viewCor(page):
+    post_list = session.query(Character).all()
+    paginator = Paginator(post_list, 5)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render_template('correspondents.html', posts=posts)
 
 @app.route('/articles/')
 @app.route('/articles')
@@ -237,7 +249,7 @@ def articles():
 @app.route('/articles/<int:page>',methods=['GET'])
 def view(page):
     post_list = session.query(BlogEntry).all()
-    paginator = Paginator(post_list, 1)
+    paginator = Paginator(post_list, 5)
     try:
         posts = paginator.page(page)
     except PageNotAnInteger:
@@ -342,6 +354,7 @@ def newChar(user_id):
                                  race=request.form['race'],
                                  gender=request.form['sex'],
                                  image_url='static/user-imgs/' + currentuser.username + instance,
+                                 image_name = currentuser.username + instance,
                                  faction=request.form['faction'],
                                  biography=request.form['biography'],
                                  user_id=currentuser.id,

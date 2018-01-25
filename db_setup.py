@@ -69,6 +69,7 @@ class Character(Base):
     gender = Column(String(250))
     image = Column(String(250))
     image_url = Column(String(250))
+    image_name = Column(String(250))
     faction = Column(String(250))
     biography = Column(String(250))
     owner_name = Column(String(250), ForeignKey('user.username'))
