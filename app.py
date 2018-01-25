@@ -279,13 +279,26 @@ def logout():
 @app.route('/<int:user_id>/newpost', methods=["GET", "POST"])
 def newPost(user_id):
     currentuser = session.query(User).filter_by(id=user_id).one()
+    allUserChars = session.query(Character).filter_by(
+        user_id=currentuser.id).all()
     if 'username' not in login_session or \
             currentuser.username != login_session['username']:
         flash('Sorry, but that is not your profile!')
         return redirect(url_for('home'))
+    if request.method == 'POST':
+        newEntry = BlogEntry(
+            title=request.form['title'],
+            entry=request.form['entry'],
+            author=request.form['author'],
+            user_id=currentuser.id)
+        session.add(newEntry)
+        flash('New Entry Added!')
+        session.commit()
+        return redirect(url_for('home', currentuser=currentuser,
+                                login_session=login_session))
     else:
         return render_template('newpost.html', currentuser=currentuser,
-                               login_session=login_session)
+                               login_session=login_session, allUserChars=allUserChars)
 
 
 @app.route('/<int:user_id>/newcharacter', methods=["GET", "POST"])
