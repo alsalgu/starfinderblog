@@ -269,8 +269,20 @@ def newPost(user_id):
         flash('Sorry, but that is not your profile!')
         return redirect(url_for('home'))
     else:
-        return render_template('newpost.html', currentuser = currentuser,
-        login_session=login_session)
+        return render_template('newpost.html', currentuser=currentuser,
+                               login_session=login_session)
+
+
+@app.route('/<int:user_id>/newcharacter', methods=["GET", "POST"])
+def newChar(user_id):
+    currentuser = session.query(User).filter_by(id=user_id).one()
+    if 'username' not in login_session or \
+            currentuser.username != login_session['username']:
+        flash('Sorry, but this is not your profile!')
+        return redirect(url_for('home'))
+    else:
+        return render_template('newcharacter.html', currentuser=currentuser,
+                               login_session=login_session)
 
     # TO DO #
 

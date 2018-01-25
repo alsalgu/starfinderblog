@@ -16,7 +16,7 @@
         <div id="tool-buttons" class="col text-right">
           <button class="btn btn-primary">Edit Profile</button>
           <a class="btn btn-primary" href="{{url_for('newPost', user_id=currentuser.id)}}">New Blog Entry</a>
-          <button class="btn btn-primary">New Character</button>
+          <a class="btn btn-primary" href="{{url_for('newChar', user_id=currentuser.id)}}">New Character</a>
         </div>
       </div>
       <!-- Tool Bar End -->

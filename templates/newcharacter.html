@@ -1,0 +1,60 @@
+{% extends "main.html" %} {% block content %}
+<!-- Intro -->
+<div class="text-center mt-3">
+  <h1 class="display-4 themefont">New Character</h1>
+</div>
+<!-- Main Panel -->
+<div class="border border-primary rounded m-2 p-2">
+  <form>
+    <div class="form-row">
+      <div class="col">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input class="form-control" id="name" placeholder="The Tragedy of Darth Plageuis the Wise" />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="race">Race:</label>
+          <input class="form-control" id="race" placeholder="The Tragedy of Darth Plageuis the Wise" />
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="faction">Faction:</label>
+      <input class="form-control" id="faction" placeholder="The Tragedy of Darth Plageuis the Wise" />
+    </div>
+    <div class="form-row">
+      <div class="col">
+        <div class="form-group">
+          <label for="sex" class="mr-2">Sex:</label>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="female" name="sex" class="custom-control-input">
+            <label class="custom-control-label" for="female">Female</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="male" name="sex" class="custom-control-input">
+            <label class="custom-control-label" for="male">Male</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="other" name="sex" class="custom-control-input">
+            <label class="custom-control-label" for="other">Other</label>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group form-inline">
+          <label for="image" class="mr-2">Picture:</label>
+          <input id="image" type="file">
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="biography">Biography:</label>
+      <textarea class="form-control" id="biography" placeholder="The Tragedy of Darth Plageuis the Wise"></textarea>
+    </div>
+    <a href="#" class="btn btn-primary">Create</a>
+    <a href="#" class="btn btn-primary">Cancel</a>
+</form>
+</div>
+{% endblock %}
