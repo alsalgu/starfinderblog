@@ -196,6 +196,22 @@ def verify_password(username_or_token, password):
 def home():
     return render_template('index.html')
 
+@app.route('/correspondents')
+def correspondents():
+    return render_template('correspondents.html')
+
+@app.route('/articles')
+def articles():
+    return render_template('articles.html')
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
 # TO DO #
 
 # User Registration
