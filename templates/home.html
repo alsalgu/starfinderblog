@@ -1,19 +1,31 @@
-{% extends "main.html" %}
-{% block content %}
+{% extends "main.html" %} {% block content %}
 <!-- Intro -->
 
-<div class="jumbotron text-center">
-  <h1 class="display-1 themefont">The Galactic Gazette</h1>
+<div class="text-center mt-3">
+  <h1 class="display-3 themefont">The Galactic Gazette</h1>
 </div>
-<!-- Latest News -->
+<!-- Main Panel -->
 <div class="row m-2">
-  <div class="col container-fluid">
-    <div class="bg-primary rounded p-2">
-      <p class="">
-        Henlo, {{ login_session['username'] }}.
-      </p>
+  <div class="col container-fluid p-0">
+    <div id="main-panel" class="border border-primary rounded p-2">
+      <!-- Toolbar -->
+      <div id="user-toolbar" class="row align-items-center justify-content-between">
+        <div id="welcome-heading" class="col">
+          <h1 class="themefont2">Welcome, {{ login_session['username'] }}...</h1>
+        </div>
+        <div id="tool-buttons" class="col text-right">
+          <button class="btn btn-primary">Edit Profile</button>
+          <a class="btn btn-primary" href="{{url_for('newPost', user_id=currentuser.id)}}">New Blog Entry</a>
+          <button class="btn btn-primary">New Character</button>
+        </div>
+      </div>
+      <!-- Tool Bar End -->
+      <div class="bg-secondary p-2 rounded">
+        Henlo.
+      </div>
     </div>
   </div>
+  <!-- Side Panel -->
   <div class="col-2">
     <div class="bg-secondary rounded p-2">
       <p class="">

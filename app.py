@@ -172,6 +172,7 @@ def gdisconnect():
 
 # This Here Verifies Passwords for API Usage
 
+
 @auth.verify_password
 def verify_password(username_or_token, password):
     user_id = User.verify_auth_token(username_or_token)
@@ -191,30 +192,34 @@ def verify_password(username_or_token, password):
 # Websites Start Here #
 #######################
 
+
 @app.route('/')
 @app.route('/home')
 def home():
     if 'username' in login_session:
         currentuser = session.query(User).filter_by(
-        username=login_session['username']).one()
+            username=login_session['username']).one()
         return render_template('home.html', login_session=login_session,
-        currentuser=currentuser)
+                               currentuser=currentuser)
     else:
         return render_template('index.html', login_session=login_session)
+
 
 @app.route('/correspondents')
 def correspondents():
     return render_template('correspondents.html')
 
+
 @app.route('/articles')
 def articles():
     return render_template('articles.html')
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         newUser = User(username=request.form['username'],
-        email=request.form['email'])
+                       email=request.form['email'])
         newUser.hash_password(request.form['password'])
         session.add(newUser)
         flash('Registered!')
@@ -223,10 +228,11 @@ def register():
     else:
         return render_template('register.html')
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-    for x in range(32))
+                    for x in range(32))
     login_session['state'] = state
     users = session.query(User).all()
     if request.method == 'POST':
@@ -242,6 +248,7 @@ def login():
     else:
         return render_template('login.html', STATE=state, users=users)
 
+
 @app.route('/logout')
 def logout():
     if 'username' in login_session:
@@ -253,22 +260,35 @@ def logout():
         flash("You aren't logged in.")
         return redirect(url_for('home'))
 
-# TO DO #
 
-# User Profile Edit
-# User Profile Guest View
+@app.route('/<int:user_id>/newpost', methods=["GET", "POST"])
+def newPost(user_id):
+    currentuser = session.query(User).filter_by(id=user_id).one()
+    if 'username' not in login_session or \
+            currentuser.username != login_session['username']:
+        flash('Sorry, but that is not your profile!')
+        return redirect(url_for('home'))
+    else:
+        return render_template('newpost.html', currentuser = currentuser,
+        login_session=login_session)
 
-# CHaracter Add
-# Character Edit/Delete/Owner VIew
-# Character Public View
+    # TO DO #
 
-# Blog ENtry Edit/DElete/OWnerview
-# Blog entry Public view
+    # User Profile Edit
+    # User Profile Guest View
 
-# Browse Character Factions
-# Search Blog Posts
+    # CHaracter Add
+    # Character Edit/Delete/Owner VIew
+    # Character Public View
 
-# End of App Code
+    # Blog ENtry Edit/DElete/OWnerview
+    # Blog entry Public view
+
+    # Browse Character Factions
+    # Search Blog Posts
+
+    # End of App Code
+
 
 if __name__ == '__main__':
     app.secret_key = secret_key

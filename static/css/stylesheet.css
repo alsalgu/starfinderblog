@@ -10,6 +10,8 @@ html, body {
    font-style: normal;
 }
 
-.wrapper {
-  margin: 10px;
-}
+.themefont2 {
+   font-family: 'TranscendsGamesMedium';
+   font-weight: normal;
+   font-style: normal;
+} 
