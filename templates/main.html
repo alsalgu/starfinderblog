@@ -49,8 +49,10 @@
     </div>
   </nav>
   {% with messages = get_flashed_messages() %} {% if messages %}
-  <div class="flash fixed-bottom p-2 border border-primary text-info">
-    {% for message in messages %} {{ message }} {% endfor %}
+  <div id="flashes" class="collapse show fixed-bottom border border-primary bg-secondary text-info">
+    <button data-target="#flashes" type="button" class="close" aria-label="Close"  data-toggle="collapse">
+  <span aria-hidden="true">&times;</span>
+</button> <span class="p-2">{% for message in messages %} {{ message }} {% endfor %}</span>
   </div>
   {% endif %} {% endwith %}
   <!--- Block Content Goes Inside Here -->
