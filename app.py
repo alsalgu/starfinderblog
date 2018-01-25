@@ -232,7 +232,7 @@ def correspondents():
 @app.route('/articles/')
 @app.route('/articles')
 def articles():
-    return render_template('articles.html')
+    return redirect(url_for('view', page = 1))
 
 @app.route('/articles/<int:page>',methods=['GET'])
 def view(page):
