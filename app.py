@@ -204,9 +204,18 @@ def correspondents():
 def articles():
     return render_template('articles.html')
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    if request.method == 'POST':
+        newUser = User(username=reques.form['username'],
+        email=request.form['email'])
+        newUser.hash_password(request.form['password'])
+        session.add(newUser)
+        flash('Registered!')
+        session.commit()
+        return redirect(url_for('home'))
+    else:
+        return render_template('register.html')
 
 @app.route('/login')
 def login():
