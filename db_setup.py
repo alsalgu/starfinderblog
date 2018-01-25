@@ -27,6 +27,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String(32), index=True)
     email = Column(String(250), nullable=False)
+    role = Column(String(250))
     password_hash = Column(String(64))
     displayName = Column(String(32))
 
@@ -78,14 +79,12 @@ class Character(Base):
     @property
     def serialize(self):
         return {'Name': self.name,
-                'Sex': self.sex,
-                'Main Breed': self.breedOne,
-                'Secondary Breed': self.breedTwo,
-                'DOB': self.dob,
-                'Dam': self.dam,
-                'Sire': self.sire,
-                'Price': self.price,
-                'Owner': self.owner_name}
+        'race': self.race,
+        'gender': self.gender,
+        'image_url': self.image_url,
+        'faction': self.faction,
+        'biography': self.biography,
+        'player': self.owner_name}
 
 # Blog Entry
 
