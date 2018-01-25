@@ -212,8 +212,10 @@ def home():
     if 'username' in login_session:
         currentuser = session.query(User).filter_by(
             username=login_session['username']).one()
+        allUserChars = session.query(Character).filter_by(
+            user_id=currentuser.id).all()
         return render_template('home.html', login_session=login_session,
-                               currentuser=currentuser)
+                               currentuser=currentuser, allUserChars=allUserChars)
     else:
         return render_template('index.html', login_session=login_session)
 
@@ -316,12 +318,12 @@ def newChar(user_id):
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], currentuser.username + instance))
+            file.save(os.path.join(
+                app.config['UPLOAD_FOLDER'], currentuser.username + instance))
             session.add(newCharacter)
             flash('New Character Uploaded!')
             session.commit()
-            return redirect(url_for('home',
-                                    filename=filename))
+            return redirect(url_for('home', login_session=login_session))
     else:
         return render_template('newcharacter.html', currentuser=currentuser,
                                login_session=login_session)
