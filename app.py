@@ -244,7 +244,7 @@ def view(page):
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
-    return render_template('view.html',posts=posts)
+    return render_template('articles.html',posts=posts)
 
 
 @app.route('/register', methods=['GET', 'POST'])
