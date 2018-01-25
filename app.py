@@ -1,3 +1,4 @@
+import os
 from db_setup import Base, User, Character, BlogEntry, secret_key
 from flask import Flask, jsonify, request, url_for, abort
 from flask import g, render_template, flash, redirect
@@ -14,6 +15,10 @@ from flask import make_response
 from flask import session as login_session
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = 'static/user-imgs'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 # METADATA: All of this creates and runs the database.
 
@@ -25,6 +30,11 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # This is where the JSON file is referenced for later use.
 
@@ -280,6 +290,23 @@ def newChar(user_id):
             currentuser.username != login_session['username']:
         flash('Sorry, but this is not your profile!')
         return redirect(url_for('home'))
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            flash('New Character Uploaded!')
+            return redirect(url_for('home',
+                                    filename=filename))
     else:
         return render_template('newcharacter.html', currentuser=currentuser,
                                login_session=login_session)
