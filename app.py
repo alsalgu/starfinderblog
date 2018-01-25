@@ -33,11 +33,13 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # This is where the JSON file is referenced for later use.
+
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -292,6 +294,16 @@ def newChar(user_id):
         flash('Sorry, but this is not your profile!')
         return redirect(url_for('home'))
     if request.method == 'POST':
+        instance = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                           for x in range(32))
+        newCharacter = Character(name=request.form['name'],
+                                 race=request.form['race'],
+                                 gender=request.form['sex'],
+                                 image_url='static/user-imgs/' + currentuser.username + instance,
+                                 faction=request.form['faction'],
+                                 biography=request.form['biography'],
+                                 user_id=currentuser.id,
+                                 owner_name=currentuser.username)
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
@@ -304,8 +316,10 @@ def newChar(user_id):
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], currentuser.username + instance))
+            session.add(newCharacter)
             flash('New Character Uploaded!')
+            session.commit()
             return redirect(url_for('home',
                                     filename=filename))
     else:
