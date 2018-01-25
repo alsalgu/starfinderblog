@@ -16,6 +16,7 @@ from flask import session as login_session
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from werkzeug.utils import secure_filename
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 UPLOAD_FOLDER = 'static/user-imgs'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -228,10 +229,22 @@ def home():
 def correspondents():
     return render_template('correspondents.html')
 
-
+@app.route('/articles/')
 @app.route('/articles')
 def articles():
     return render_template('articles.html')
+
+@app.route('/articles/<int:page>',methods=['GET'])
+def view(page):
+    post_list = session.query(BlogEntry).all()
+    paginator = Paginator(post_list, 1)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render_template('view.html',posts=posts)
 
 
 @app.route('/register', methods=['GET', 'POST'])
