@@ -8,7 +8,7 @@ import string
 from itsdangerous import(
     TimedJSONWebSignatureSerializer as
     Serializer, BadSignature, SignatureExpired)
-import datetime
+from time import gmtime, strftime
 
 Base = declarative_base()
 secret_key = ''.join(random.choice(
@@ -16,7 +16,7 @@ secret_key = ''.join(random.choice(
 
 
 def _get_date():
-    return datetime.datetime.now()
+    return strftime("%a, %d %b %Y %H:%M:%S %Z", gmtime())
 
 # Website Users Table
 
@@ -94,7 +94,7 @@ class BlogEntry(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(250), nullable=False)
     entry = Column(String(1000000), nullable=False)
-    tags = Column(String(250))
+    date = Column(String(250))
     author = Column(String(250))
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship("User", foreign_keys=[user_id])

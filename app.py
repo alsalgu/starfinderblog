@@ -1,5 +1,5 @@
 import os
-from db_setup import Base, User, Character, BlogEntry, secret_key
+from db_setup import Base, User, Character, BlogEntry, secret_key, _get_date
 from flask import Flask, jsonify, request, url_for, abort
 from flask import g, render_template, flash, redirect
 from sqlalchemy.ext.declarative import declarative_base
@@ -214,8 +214,12 @@ def home():
             username=login_session['username']).one()
         allUserChars = session.query(Character).filter_by(
             user_id=currentuser.id).all()
-        return render_template('home.html', login_session=login_session,
-                               currentuser=currentuser, allUserChars=allUserChars)
+        allUserPosts = session.query(BlogEntry).filter_by(
+            user_id=currentuser.id).all()
+        return render_template('home.html', allUserPosts=allUserPosts,
+                               login_session=login_session,
+                               currentuser=currentuser,
+                               allUserChars=allUserChars)
     else:
         return render_template('index.html', login_session=login_session)
 
@@ -290,6 +294,7 @@ def newPost(user_id):
             title=request.form['title'],
             entry=request.form['entry'],
             author=request.form['author'],
+            date=_get_date(),
             user_id=currentuser.id)
         session.add(newEntry)
         flash('New Entry Added!')

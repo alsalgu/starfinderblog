@@ -20,17 +20,45 @@
         </div>
       </div>
       <!-- Tool Bar End -->
-      <div class="bg-secondary p-2 rounded">
-         {% for i in allUserChars %} <img src="{{ i.image_url }}" style="max-width:300px;"/> {% endfor %} 
+      <div class="d-flex flex-column-reverse">
+        {% for i in allUserPosts %}
+        <div class="card m-2">
+          <div class="card-header pb-0 bg-light">
+            <div class="row">
+              <div class="col text-muted text-left">
+                <h5 class="">{{ i.author }}</h5>
+              </div>
+              <div class="col text-muted text-right">
+                {{ i.date }}
+              </div>
+            </div>
+          </div>
+          <div class="card-body bg-primary rounded-bottom">
+            <h4 class="card-title">
+              {{ i.title }}
+            </h4>
+            <p class="card-text bg-light rounded p-2 mt-2">
+              {{ i.entry }}
+            </p>
+            <div class="text-right">
+              <a href="#!" class="btn btn-dark btn-sm">Edit</a>
+              <a href="#!" class="btn btn-dark btn-sm">Delete</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
       </div>
+
     </div>
   </div>
   <!-- Side Panel -->
   <div class="col-2">
     <div class="bg-secondary rounded p-2">
-      <p class="">
-        Henlo again, {{ login_session['username'] }}.
-      </p>
+      <div class="bg-secondary p-2 rounded">
+        {% for i in allUserChars %}
+        <a href="#">{{ i.name }}</a>
+        <img class="mt-1 mb-1" src="{{ i.image_url }}" style="max-width:100%;" /> {% endfor %}
+      </div>
     </div>
   </div>
 
