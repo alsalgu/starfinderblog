@@ -388,26 +388,28 @@ def newChar(user_id):
 
 @app.route('/correspondents/<string:user_name>/<string:char>')
 def charProf(user_name, char):
+    try:
+        currentuser = session.query(User).filter_by(username=login_session['username']).one()
+    except:
+        currentuser = 'Guest'
     activeProfile = session.query(User).filter_by(username=user_name).one()
     activeCharacter = session.query(Character).filter_by(name=char).one()
     allProfileChars = session.query(
         Character).filter_by(owner_name=user_name).all()
     return render_template('charprofile.html', activeProfile=activeProfile,
                            activeCharacter=activeCharacter,
-                           allProfileChars=allProfileChars, login_session=login_session)
+                           allProfileChars=allProfileChars,
+                           login_session=login_session,
+                           currentuser=currentuser)
 
     # TO DO #
 
     # User Profile Edit
     # User Profile Guest View
 
-    # CHaracter Add
     # Character Edit/Delete/Owner VIew
     # Character Public View
-
     # Blog ENtry Edit/DElete/OWnerview
-    # Blog entry Public view
-
     # Browse Character Factions
     # Search Blog Posts
 
