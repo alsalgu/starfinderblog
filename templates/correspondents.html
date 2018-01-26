@@ -2,27 +2,27 @@
 <div class="text-center mt-3">
   <h1 class="display-3 themefont">Starring...</h1>
 </div>
-  <div class="card-columns">
+  <div class="card-group">
   {% for i in posts %}
-  <div class="card m-2">
-    <div class="card-header pb-0 bg-light">
+  <div class="card m-2 border border-primary">
+    <div class="card-header pb-0 bg-primary">
       <div class="row">
-        <div class="col text-muted text-left">
+        <div class="col text-left">
           <h5 class="">{{ i.faction }}</h5>
         </div>
-        <div class="col text-muted text-right">
+        <div class="col text-white text-right">
           {{ i.owner_name }}
         </div>
       </div>
     </div>
-    <div class="text-center">
-      <img class="mt-1 mb-1" src="{{ url_for('static', filename='user-imgs/' + i.image_name) }}" style="max-width: 300px" />
+    <div class="text-center" style="max-height: 200px; min-height: 200px">
+      <img class="mt-1 mb-1" src="{{ url_for('static', filename='user-imgs/' + i.image_name) }}" style="max-height: 190px;" />
     </div>
-    <div class="card-body bg-primary rounded-bottom">
+    <div class="card-body bg-secondary rounded-bottom">
       <h4 class="card-title">
-        {{ i.name }}
+        <a class="text-info" href="{{url_for('charProf', user_name=i.owner_name, char=i.name)}}">{{ i.name }}</a>
       </h4>
-      <p class="card-text bg-light rounded p-2 mt-2">
+      <p class="card-text bg-light rounded p-2 mt-2" style="overflow: auto;">
         {{ i.biography }}
       </p>
     </div>

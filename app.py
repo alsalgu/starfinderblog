@@ -227,7 +227,8 @@ def home():
 
 @app.route('/correspondents')
 def correspondents():
-    return redirect(url_for('viewCor', page = 1))
+    return redirect(url_for('viewCor', page=1))
+
 
 @app.route('/correspondents/<int:page>', methods=['GET'])
 def viewCor(page):
@@ -241,12 +242,14 @@ def viewCor(page):
         posts = paginator.page(paginator.num_pages)
     return render_template('correspondents.html', posts=posts)
 
+
 @app.route('/articles/')
 @app.route('/articles')
 def articles():
-    return redirect(url_for('view', page = 1))
+    return redirect(url_for('view', page=1))
 
-@app.route('/articles/<int:page>',methods=['GET'])
+
+@app.route('/articles/<int:page>', methods=['GET'])
 def view(page):
     post_list = session.query(BlogEntry).all()
     paginator = Paginator(post_list, 5)
@@ -256,7 +259,7 @@ def view(page):
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
-    return render_template('articles.html',posts=posts)
+    return render_template('articles.html', posts=posts)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -354,7 +357,7 @@ def newChar(user_id):
                                  race=request.form['race'],
                                  gender=request.form['sex'],
                                  image_url='static/user-imgs/' + currentuser.username + instance,
-                                 image_name = currentuser.username + instance,
+                                 image_name=currentuser.username + instance,
                                  faction=request.form['faction'],
                                  biography=request.form['biography'],
                                  user_id=currentuser.id,
@@ -380,6 +383,16 @@ def newChar(user_id):
     else:
         return render_template('newcharacter.html', currentuser=currentuser,
                                login_session=login_session)
+
+
+@app.route('/correspondents/<string:user_name>/<string:char>')
+def charProf(user_name, char):
+    activeProfile = session.query(User).filter_by(username=user_name).one()
+    activeCharacter = session.query(Character).filter_by(name=char).one()
+    allProfileChars = session.query(Character).filter_by(owner_name=user_name).all()
+    return render_template('charprofile.html', activeProfile=activeProfile,
+                           activeCharacter=activeCharacter,
+                           allProfileChars=allProfileChars)
 
     # TO DO #
 

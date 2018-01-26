@@ -56,7 +56,7 @@
     <div class="bg-secondary rounded p-2">
       <div class="bg-secondary p-2 rounded">
         {% for i in allUserChars %}
-        <a href="#">{{ i.name }}</a>
+        <a href="{{url_for('charProf', user_name=i.owner_name, char=i.name)}}">{{ i.name }}</a>
         <img class="mt-1 mb-1" src="{{ i.image_url }}" style="max-width:100%;" /> {% endfor %}
       </div>
     </div>
