@@ -240,7 +240,7 @@ def viewCor(page):
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
-    return render_template('correspondents.html', posts=posts)
+    return render_template('correspondents.html', posts=posts, login_session=login_session)
 
 
 @app.route('/articles/')
@@ -259,7 +259,8 @@ def view(page):
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
-    return render_template('articles.html', posts=posts)
+    return render_template('articles.html', posts=posts,
+                           login_session=login_session)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -389,10 +390,11 @@ def newChar(user_id):
 def charProf(user_name, char):
     activeProfile = session.query(User).filter_by(username=user_name).one()
     activeCharacter = session.query(Character).filter_by(name=char).one()
-    allProfileChars = session.query(Character).filter_by(owner_name=user_name).all()
+    allProfileChars = session.query(
+        Character).filter_by(owner_name=user_name).all()
     return render_template('charprofile.html', activeProfile=activeProfile,
                            activeCharacter=activeCharacter,
-                           allProfileChars=allProfileChars)
+                           allProfileChars=allProfileChars, login_session=login_session)
 
     # TO DO #
 
