@@ -55,7 +55,7 @@
               {{ i.entry }}
             </p>
             <div class="row container-fluid m-0 p-0 justify-content-end">
-              <a href="#!" class="btn btn-dark btn-sm mr-2">Edit</a>
+              <a href="{{ url_for('editPost', user_id=currentuser.id, post_id=i.id) }}" class="btn btn-dark btn-sm mr-2">Edit</a>
                 <button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".confirmation">Delete</button>
             </div>
           </div>

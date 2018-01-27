@@ -350,6 +350,32 @@ def newPost(user_id):
         return render_template('newpost.html', currentuser=currentuser,
                                login_session=login_session, allUserChars=allUserChars)
 
+@app.route('/<int:user_id>/<int:post_id>/editpost', methods=["GET", "POST"])
+def editPost(user_id, post_id):
+    currentuser = session.query(User).filter_by(id=user_id).one()
+    currentEntry = session.query(BlogEntry).filter_by(id=post_id).one()
+    if 'username' not in login_session or \
+            currentuser.username != login_session['username']:
+        flash('Sorry, but that is not your profile!')
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        if request.form['title']:
+            currentEntry.title = request.form['title']
+        if request.form['entry']:
+            currentEntry.entry = request.form['entry']
+        if request.form['author']:
+            currentEntry.author = request.form['author']
+        session.add(currentEntry)
+        flash('Entry Updated!')
+        session.commit()
+        return redirect(url_for('home', currentuser=currentuser,
+                                login_session=login_session))
+    else:
+        return render_template('editpost.html', currentuser=currentuser,
+                               login_session=login_session,
+                               currentEntry = currentEntry)
+
+
 
 @app.route('/<int:user_id>/newcharacter', methods=["GET", "POST"])
 def newChar(user_id):
@@ -463,8 +489,6 @@ def editChar(user_name, char, char_id):
 
     # User Profile Edit
     # User Profile Guest View
-
-    # Character Edit/Delete/Owner VIew
     # Blog ENtry Edit/DElete/OWnerview
     # Browse Character Factions
     # Search Blog Posts
