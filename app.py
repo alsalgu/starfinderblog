@@ -207,8 +207,8 @@ def verify_password(username_or_token, password):
 #######################
 
 
-@app.route('/')
-@app.route('/home')
+@app.route('/', methods=["GET", "POST"])
+@app.route('/home', methods=["GET", "POST"])
 def home():
     if 'username' in login_session:
         currentuser = session.query(User).filter_by(
@@ -217,6 +217,13 @@ def home():
             user_id=currentuser.id).all()
         allUserPosts = session.query(BlogEntry).filter_by(
             user_id=currentuser.id).all()
+        if request.method == "POST":
+            entry = session.query(BlogEntry).filter_by(
+            id=request.form['value']
+            ).one()
+            session.delete(entry)
+            session.commit()
+            return redirect(url_for('home', login_session=login_session))
         return render_template('home.html', allUserPosts=allUserPosts,
                                login_session=login_session,
                                currentuser=currentuser,

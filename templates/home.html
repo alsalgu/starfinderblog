@@ -1,6 +1,7 @@
 {% extends "main.html" %} {% block content %}
 <!-- Intro -->
 
+
 <div class="text-center mt-3">
   <h1 class="display-3 themefont">The Galactic Gazette</h1>
 </div>
@@ -22,6 +23,19 @@
       <!-- Tool Bar End -->
       <div class="d-flex flex-column-reverse container-fluid">
         {% for i in allUserPosts %}
+        <div class="modal fade confirmation" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title">Are you sure you want to delete?</h1>
+              </div>
+              <div class="modal-footer">
+                <form action="/" method="POST">
+                  <input name="value" class="d-none" value="{{i.id}}" />
+                  <button type="submit" class="btn btn-warning">Yes</button>
+                </form>
+                <button class="btn btn-primary" data-dismiss="modal">No.</button>
+              </div></div></div></div>
         <div class="card m-2" style="max-width: 100%">
           <div class="card-header pb-0 bg-light">
             <div class="row">
@@ -40,9 +54,9 @@
             <p class="card-text bg-light rounded p-2 mt-2">
               {{ i.entry }}
             </p>
-            <div class="text-right">
-              <a href="#!" class="btn btn-dark btn-sm">Edit</a>
-              <a href="#!" class="btn btn-dark btn-sm">Delete</a>
+            <div class="row container-fluid m-0 p-0 justify-content-end">
+              <a href="#!" class="btn btn-dark btn-sm mr-2">Edit</a>
+                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".confirmation">Delete</button>
             </div>
           </div>
         </div>
