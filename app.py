@@ -377,10 +377,10 @@ def newChar(user_id):
             filename = secure_filename(file.filename)
             file.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], currentuser.username + instance))
-            session.add(newCharacter)
-            flash('New Character Uploaded!')
-            session.commit()
-            return redirect(url_for('home', login_session=login_session))
+        session.add(newCharacter)
+        flash('New Character Uploaded!')
+        session.commit()
+        return redirect(url_for('home', login_session=login_session))
     else:
         return render_template('newcharacter.html', currentuser=currentuser,
                                login_session=login_session)
@@ -389,7 +389,8 @@ def newChar(user_id):
 @app.route('/correspondents/<string:user_name>/<string:char>')
 def charProf(user_name, char):
     try:
-        currentuser = session.query(User).filter_by(username=login_session['username']).one()
+        currentuser = session.query(User).filter_by(
+            username=login_session['username']).one()
     except:
         currentuser = 'Guest'
     activeProfile = session.query(User).filter_by(username=user_name).one()
@@ -402,13 +403,52 @@ def charProf(user_name, char):
                            login_session=login_session,
                            currentuser=currentuser)
 
+
+@app.route('/correspondents/<string:user_name>/<string:char>/<int:char_id>/edit', methods=["GET", "POST"])
+def editChar(user_name, char, char_id):
+    try:
+        currentuser = session.query(User).filter_by(
+            username=login_session['username']).one()
+    except:
+        currentuser = 'Guest'
+    activeProfile = session.query(User).filter_by(username=user_name).one()
+    activeCharacter = session.query(Character).filter_by(id=char_id).one()
+    allProfileChars = session.query(
+        Character).filter_by(owner_name=user_name).all()
+    if request.method == 'POST':
+        instance = ''.join(random.choice(string.ascii_uppercase + string.digits))
+        if currentuser == 'Guest' or currentuser.id != activeProfile.id:
+            flash('Sorry, this is not your profile!')
+            return redirect(url_for('home', login_session=login_session))
+        else:
+            if request.form['name']:
+                activeCharacter.name=request.form['name']
+            if request.form['sex']:
+                activeCharacter.gender=request.form['sex']
+            if request.form['faction']:
+                activeCharacter.faction=request.form['faction']
+            if request.form['biography']:
+                activeCharacter.biography=request.form['biography']
+            if request.form['race']:
+                activeCharacter.race=request.form['race']
+            session.add(activeCharacter)
+            flash('Character Sucessfully Updated!')
+            session.commit()
+            return redirect(url_for('charProf', user_name=activeProfile.username,
+            char=activeCharacter.name, login_session=login_session))
+    else:
+        return render_template('editcharacter.html', activeProfile=activeProfile,
+                               activeCharacter=activeCharacter,
+                               allProfileChars=allProfileChars,
+                               login_session=login_session,
+                               currentuser = currentuser)
+
     # TO DO #
 
     # User Profile Edit
     # User Profile Guest View
 
     # Character Edit/Delete/Owner VIew
-    # Character Public View
     # Blog ENtry Edit/DElete/OWnerview
     # Browse Character Factions
     # Search Blog Posts
@@ -417,6 +457,6 @@ def charProf(user_name, char):
 
 
 if __name__ == '__main__':
-    app.secret_key = secret_key
-    app.debug = True
+    app.secret_key=secret_key
+    app.debug=True
     app.run(host='0.0.0.0', port=8000)

@@ -1,0 +1,54 @@
+{% extends "main.html" %} {% block content %}
+<!-- Intro -->
+<div class="text-center mt-3">
+  <h1 class="display-4 themefont">Now Editting {{activeProfile.name}}</h1>
+</div>
+<!-- Main Panel -->
+<div class="border border-primary rounded m-2 p-2">
+  <form method="post" enctype="multipart/form-data">
+    <div class="form-row">
+      <div class="col">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input class="form-control" name="name" placeholder="{{activeCharacter.name}}" />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="race">Race:</label>
+          <input class="form-control" name="race" placeholder="{{activeCharacter.race}}" />
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="faction">Faction:</label>
+      <input class="form-control" name="faction" placeholder="{{activeCharacter.faction}}" />
+    </div>
+    <div class="form-row">
+      <div class="col">
+        <div class="form-group">
+          <label for="sex" class="mr-2">Sex:</label>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="female" name="sex" class="custom-control-input" value="Female" checked>
+            <label class="custom-control-label" for="female">Female</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="male" name="sex" class="custom-control-input" value="Male">
+            <label class="custom-control-label" for="male">Male</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="other" name="sex" class="custom-control-input" value="Other">
+            <label class="custom-control-label" for="other">Other</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="biography">Biography:</label>
+      <textarea class="form-control" name="biography" placeholder="{{activeCharacter.biography}}"></textarea>
+    </div>
+    <input type="submit" value="Create" class="btn btn-primary" />
+    <a class="btn btn-primary" href="{{ url_for('home') }}">Cancel</a>
+  </form>
+</div>
+{% endblock %}
