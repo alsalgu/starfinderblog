@@ -46,7 +46,7 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Restaurant Menu Application"
 
-# Google Sign-In
+# Google Sign-In for when I care to implement it.
 
 
 @app.route('/gconnect', methods=['POST'])
@@ -219,7 +219,7 @@ def home():
             user_id=currentuser.id).all()
         if request.method == "POST":
             entry = session.query(BlogEntry).filter_by(
-            id=request.form['value']
+                id=request.form['value']
             ).one()
             session.delete(entry)
             session.commit()
@@ -350,10 +350,13 @@ def newPost(user_id):
         return render_template('newpost.html', currentuser=currentuser,
                                login_session=login_session, allUserChars=allUserChars)
 
+
 @app.route('/<int:user_id>/<int:post_id>/editpost', methods=["GET", "POST"])
 def editPost(user_id, post_id):
     currentuser = session.query(User).filter_by(id=user_id).one()
     currentEntry = session.query(BlogEntry).filter_by(id=post_id).one()
+    allUserChars = session.query(Character).filter_by(
+        user_id=currentuser.id).all()
     if 'username' not in login_session or \
             currentuser.username != login_session['username']:
         flash('Sorry, but that is not your profile!')
@@ -373,8 +376,7 @@ def editPost(user_id, post_id):
     else:
         return render_template('editpost.html', currentuser=currentuser,
                                login_session=login_session,
-                               currentEntry = currentEntry)
-
+                               currentEntry=currentEntry, allUserChars=allUserChars)
 
 
 @app.route('/<int:user_id>/newcharacter', methods=["GET", "POST"])
@@ -430,6 +432,8 @@ def charProf(user_name, char_id, char):
     activeCharacter = session.query(Character).filter_by(id=char_id).one()
     allProfileChars = session.query(
         Character).filter_by(owner_name=user_name).all()
+    charBlogPosts = session.query(BlogEntry).filter_by(author=activeCharacter.name,
+                                                       user_id=activeProfile.id).all()
     if request.method == 'POST':
         if currentuser == 'Guest' or currentuser.id != activeProfile.id:
             flash('Sorry, this is not your profile!')
@@ -443,7 +447,8 @@ def charProf(user_name, char_id, char):
                            activeCharacter=activeCharacter,
                            allProfileChars=allProfileChars,
                            login_session=login_session,
-                           currentuser=currentuser)
+                           currentuser=currentuser,
+                           charBlogPosts=charBlogPosts)
 
 
 @app.route('/correspondents/<string:user_name>/<string:char>/<int:char_id>/edit', methods=["GET", "POST"])
@@ -458,45 +463,88 @@ def editChar(user_name, char, char_id):
     allProfileChars = session.query(
         Character).filter_by(owner_name=user_name).all()
     if request.method == 'POST':
-        instance = ''.join(random.choice(string.ascii_uppercase + string.digits))
+        instance = ''.join(random.choice(
+            string.ascii_uppercase + string.digits))
         if currentuser == 'Guest' or currentuser.id != activeProfile.id:
             flash('Sorry, this is not your profile!')
             return redirect(url_for('home', login_session=login_session))
         else:
             if request.form['name']:
-                activeCharacter.name=request.form['name']
+                activeCharacter.name = request.form['name']
             if request.form['sex']:
-                activeCharacter.gender=request.form['sex']
+                activeCharacter.gender = request.form['sex']
             if request.form['faction']:
-                activeCharacter.faction=request.form['faction']
+                activeCharacter.faction = request.form['faction']
             if request.form['biography']:
-                activeCharacter.biography=request.form['biography']
+                activeCharacter.biography = request.form['biography']
             if request.form['race']:
-                activeCharacter.race=request.form['race']
+                activeCharacter.race = request.form['race']
             session.add(activeCharacter)
             flash('Character Sucessfully Updated!')
             session.commit()
             return redirect(url_for('charProf', user_name=activeProfile.username,
-            char_id=activeCharacter.id, char=activeCharacter.name, login_session=login_session))
+                                    char_id=activeCharacter.id, char=activeCharacter.name, login_session=login_session))
     else:
         return render_template('editcharacter.html', activeProfile=activeProfile,
                                activeCharacter=activeCharacter,
                                allProfileChars=allProfileChars,
                                login_session=login_session,
-                               currentuser = currentuser)
+                               currentuser=currentuser)
 
-    # TO DO #
 
-    # User Profile Edit
-    # User Profile Guest View
-    # Blog ENtry Edit/DElete/OWnerview
-    # Browse Character Factions
-    # Search Blog Posts
+@app.route('/correspondents/<string:user_name>/<string:char>/<int:char_id>/editpic', methods=["GET", "POST"])
+def updatePic(user_name, char, char_id):
+    try:
+        currentuser = session.query(User).filter_by(
+            username=login_session['username']).one()
+    except:
+        currentuser = 'Guest'
+    activeProfile = session.query(User).filter_by(username=user_name).one()
+    activeCharacter = session.query(Character).filter_by(id=char_id).one()
+    allProfileChars = session.query(
+        Character).filter_by(owner_name=user_name).all()
+    if request.method == 'POST':
+        instance = ''.join(random.choice(
+            string.ascii_uppercase + string.digits))
+        if currentuser == 'Guest' or currentuser.id != activeProfile.id:
+            flash('Sorry, this is not your profile!')
+            return redirect(url_for('home', login_session=login_session))
+        else:
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            file = request.files['file']
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(
+                    app.config['UPLOAD_FOLDER'], currentuser.username + instance))
+                activeCharacter.image_name = currentuser.username + instance
+                activeCharacter.image_url = 'static/user-imgs/' + currentuser.username + instance
+            session.add(activeCharacter)
+            flash('Picture Updated!')
+            session.commit()
+            return redirect(url_for('home', login_session=login_session))
+    else:
+        return render_template('updatepic.html', activeProfile=activeProfile,
+                               activeCharacter=activeCharacter,
+                               currentuser=currentuser,
+                               allProfileChars=allProfileChars)
 
-    # End of App Code
+        # TO DO #
+
+        # User Profile Edit
+        # User Profile Guest View
+        # Blog ENtry Edit/DElete/OWnerview
+        # Browse Character Factions
+        # Search Blog Posts
+
+        # End of App Code
 
 
 if __name__ == '__main__':
-    app.secret_key=secret_key
-    app.debug=True
+    app.secret_key = secret_key
+    app.debug = True
     app.run(host='0.0.0.0', port=8000)
