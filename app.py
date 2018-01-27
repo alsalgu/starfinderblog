@@ -386,7 +386,7 @@ def newChar(user_id):
                                login_session=login_session)
 
 
-@app.route('/correspondents/<string:user_name>/<string:char>')
+@app.route('/correspondents/<string:user_name>/<string:char>', methods=["GET", "POST"])
 def charProf(user_name, char):
     try:
         currentuser = session.query(User).filter_by(
@@ -397,6 +397,15 @@ def charProf(user_name, char):
     activeCharacter = session.query(Character).filter_by(name=char).one()
     allProfileChars = session.query(
         Character).filter_by(owner_name=user_name).all()
+    if request.method == 'POST':
+        if currentuser == 'Guest' or currentuser.id != activeProfile.id:
+            flash('Sorry, this is not your profile!')
+            return redirect(url_for('home', login_session=login_session))
+        else:
+            session.delete(activeCharacter)
+            flash('Character Sucessfully Deleted...')
+            session.commit()
+            return redirect(url_for('home', login_session=login_session))
     return render_template('charprofile.html', activeProfile=activeProfile,
                            activeCharacter=activeCharacter,
                            allProfileChars=allProfileChars,

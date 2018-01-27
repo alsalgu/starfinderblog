@@ -1,6 +1,21 @@
 {% extends "main.html" %} {% block content %}
 <!-- Intro -->
+<div class="modal fade confirmation" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title">Are you sure you want to delete?</h1>
+      </div>
+      <div class="modal-footer">
+        <form action="#" method="POST">
+          <button type="submit" class="btn btn-warning">Yes</button>
+        </form>
+        <button class="btn btn-primary" data-dismiss="modal">No.</button>
+      </div>
 
+    </div>
+  </div>
+</div>
 <div class="text-center mt-3">
   <h1 class="display-3 themefont">The Galactic Gazette</h1>
 </div>
@@ -35,7 +50,7 @@
           <button class="btn btn-primary btn-block mt-2">{{activeCharacter.name}}'s Player</button> {% if currentuser != 'Guest' and currentuser.username == activeProfile.username %}
           <a class="btn btn-danger btn-block mt-2" href="{{url_for('editChar', user_name=activeCharacter.owner_name, char=activeCharacter.name, char_id=activeCharacter.id)}}">Edit</a>
           <button class="btn btn-danger btn-block mt-2">Update Picture</button>
-          <button class="btn btn-danger btn-block mt-2">Delete</button> {% endif %}
+          <button class="btn btn-danger btn-block mt-2" data-toggle="modal" data-target=".confirmation">Delete</button> {% endif %}
         </div>
         <div class="mt-3 bg-light rounded p-2 text-left">
           <h6>Other Characters by {{activeProfile.username}}:</h6> {% for i in allProfileChars %}
