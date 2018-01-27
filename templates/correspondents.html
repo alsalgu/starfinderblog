@@ -20,7 +20,7 @@
     </div>
     <div class="card-body bg-secondary rounded-bottom">
       <h4 class="card-title">
-        <a class="text-info" href="{{url_for('charProf', user_name=i.owner_name, char=i.name)}}">{{ i.name }}</a>
+        <a class="text-info" href="{{url_for('charProf', user_name=i.owner_name, char_id=i.id, char=i.name)}}">{{ i.name }}</a>
       </h4>
       <p class="card-text bg-light rounded p-2 mt-2" style="overflow: auto;">
         {{ i.biography }}
