@@ -386,15 +386,15 @@ def newChar(user_id):
                                login_session=login_session)
 
 
-@app.route('/correspondents/<string:user_name>/<string:char>', methods=["GET", "POST"])
-def charProf(user_name, char):
+@app.route('/correspondents/<string:user_name>/<int:char_id>/<string:char>', methods=["GET", "POST"])
+def charProf(user_name, char_id, char):
     try:
         currentuser = session.query(User).filter_by(
             username=login_session['username']).one()
     except:
         currentuser = 'Guest'
     activeProfile = session.query(User).filter_by(username=user_name).one()
-    activeCharacter = session.query(Character).filter_by(name=char).one()
+    activeCharacter = session.query(Character).filter_by(id=char_id).one()
     allProfileChars = session.query(
         Character).filter_by(owner_name=user_name).all()
     if request.method == 'POST':
@@ -444,7 +444,7 @@ def editChar(user_name, char, char_id):
             flash('Character Sucessfully Updated!')
             session.commit()
             return redirect(url_for('charProf', user_name=activeProfile.username,
-            char=activeCharacter.name, login_session=login_session))
+            char_id=activeCharacter.id, char=activeCharacter.name, login_session=login_session))
     else:
         return render_template('editcharacter.html', activeProfile=activeProfile,
                                activeCharacter=activeCharacter,
